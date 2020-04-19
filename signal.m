@@ -8,6 +8,8 @@ N = 513;
 n_0 = -256;
 n = -256:1:N-257;
 
+H = [T * n', ones(length(n), 1)];
+C = eye(N);
 P = N * ( N - 1) / 2;
 Q = N * ( N - 1) * (2*N - 1) / 6;
 
@@ -21,7 +23,7 @@ snr = 1 / (2 * s^2);
 snr_log = 10 * log10(snr);
 snr_mag = db2mag(snr_log);
 
-var_w_hat = 12*s^2 / (A^2 * T^2 * N ( N^2 - 1));
+var_w_hat = 12*s^2 / (A^2 * T^2 * N * ( N^2 - 1));
 var_phi_hat = 12*s^2 * (n_0^2 * N + 2*n_0 * P + Q) / (A^2 * N^2 * ( N^2 - 1));
 
 log_x = 1i * ( w_0 * n * T + phi + v );
@@ -29,12 +31,20 @@ x_p = w_0 * n * T + phi + v;
 x = A * exp( log_x );
 x_u = unwrap( x_p );
 
+C_hat = s^2 * (H' / (A * A' ) * H);
+phi_hat = (H' / ( A * A' ) * H ) * H' / ( A * A' );
 
 figure
-subplot(2,1,1)
+subplot(4,1,1)
 plot(n, x);
 title(['SNR: ',  num2str( snr_log ), ' db']);
 legend('x')
-subplot(2,1,2)
+subplot(4,1,2)
 plot(n, unwrap(angle(x)))
 legend('unwrap(x)')
+subplot(4,1,3)
+plot(n, phi_hat(1,:))
+legend('omega^')
+subplot(4,1,4)
+plot(n, phi_hat(2,:))
+legend('phi^')
