@@ -62,12 +62,15 @@ CRLB_phi_hat = 12*s.^2 * (n_0^2 * N + 2*n_0 * P + Q) / (A^2 * N^2 * ( N^2 - 1));
 
 phases = angle(martin(2:N,:)) - angle(martin(1:N-1,:));
 
+%blue = BLUE_color(phases, H, C);
+
+
 %%%% Oppg a
 
 % figure
 % plot(n, martin)
 % legend('-10 db', '0 db', '10 db', '20 db', '30 db', '40 db')
-
+% 
 % figure;
 % plot(n, unwrap(angle(martin)));
 % grid on;
@@ -75,8 +78,8 @@ phases = angle(martin(2:N,:)) - angle(martin(1:N-1,:));
 % ylabel('Angle [rad]');
 % xlabel('SNR [dB]');
 % legend('-10 db', '0 db', '10 db', '20 db', '30 db', '40 db')
-
-
+% 
+% 
 % figure
 % subplot(4,1,1)
 % plot(n, x);
@@ -94,28 +97,31 @@ phases = angle(martin(2:N,:)) - angle(martin(1:N-1,:));
 % title(['var: ',  num2str( var(theta_hat(2,:)))]);
 % legend('phi^')
 
-%%%% Oppg b
+%%% Oppg b
 figure
 subplot(2,2,1)
 plot(snr_db, blue(2,:), snr_db, CRLB_phi_hat)
+title('title')
 grid on;
 xlabel('SNR [dB]');
-legend('BLUE phi', 'CRLB phi')
+leg = legend({'var ($\hat{\phi}$)', 'CRLB var ($\phi$)'});
+set(leg, 'interpreter', 'latex');
 
 subplot(2,2,2)
 plot(snr_db, blue(1,:), snr_db, CRLB_w_hat)
 grid on;
 xlabel('SNR [dB]');
-legend('BLUE omega', 'CRLB omega')
+leg = legend({'var ($\hat{\omega}$)', 'CRLB var ($\omega$)'});
+set(leg, 'interpreter', 'latex');
 
 subplot(2,2,3)
-plot(snr_db, blue(2,:) - CRLB_phi_hat)
+plot(snr_db, abs(blue(2,:) - CRLB_phi_hat))
 title('Difference(BLUE phi, CRLB phi)')
 grid on;
 xlabel('SNR [dB]');
 
 subplot(2,2,4)
-plot(snr_db, blue(1,:) - CRLB_w_hat)
+plot(snr_db, abs(blue(1,:) - CRLB_w_hat))
 title('Difference(BLUE omega, CRLB omega)')
 grid on;
 xlabel('SNR [dB]');
@@ -145,5 +151,5 @@ end
 
 function est = BLUE_color(signal, H, C)
     M = ((H' * (C \ H)) \ H') / C;
-    est = M * signal;
+    est = M(:, 1:512) * signal;
 end
