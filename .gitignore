@@ -4,3 +4,8 @@
 *.png
 *.fig
 *.eps
+*.m
+!BLUE_c.m
+!BLUE.m
+!main.m
+!plots.m

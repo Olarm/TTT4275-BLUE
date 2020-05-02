@@ -54,9 +54,10 @@ end
 %%% B
 
 blue = BLUE_white(martin, H, C);
+blue_var = inv(H' * inv(
 
-CRLB_w_hat = 12*s.^2 / (A^2 * T^2 * N * ( N^2 - 1));
-CRLB_phi_hat = 12*s.^2 * (n_0^2 * N + 2*n_0 * P + Q) / (A^2 * N^2 * ( N^2 - 1));
+CRLB_w_hat = 12.*s.^2 / (A^2 * T^2 * N * ( N^2 - 1));
+CRLB_phi_hat = 12.*s.^2 * (n_0^2 * N + 2*n_0 * P + Q) / (A^2 * N^2 * ( N^2 - 1));
 
 %%% C
 
@@ -101,17 +102,18 @@ phases = angle(martin(2:N,:)) - angle(martin(1:N-1,:));
 figure
 subplot(2,2,1)
 plot(snr_db, blue(2,:), snr_db, CRLB_phi_hat)
-title('title')
+title('Phase estimate compared with CRLB')
 grid on;
 xlabel('SNR [dB]');
-leg = legend({'var ($\hat{\phi}$)', 'CRLB var ($\phi$)'});
+leg = legend({'BLUE var ($\hat{\phi}$)', 'CRLB var ($\phi$)'});
 set(leg, 'interpreter', 'latex');
 
 subplot(2,2,2)
 plot(snr_db, blue(1,:), snr_db, CRLB_w_hat)
+title('Frequency estimate compared with CRLB')
 grid on;
 xlabel('SNR [dB]');
-leg = legend({'var ($\hat{\omega}$)', 'CRLB var ($\omega$)'});
+leg = legend({'BLUE var ($\hat{\omega}$)', 'CRLB var ($\omega$)'});
 set(leg, 'interpreter', 'latex');
 
 subplot(2,2,3)
